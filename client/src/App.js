@@ -3,9 +3,7 @@ import "./App.css";
 
 import { io } from "socket.io-client";
 import { BrowserRouter as Router,Routes as Switch, Route, Link } from 'react-router-dom';
-import Hospital from './components/Hospital';
-import PoliceStation from './components/PoliceStation';
-import Family from './components/Family';
+
 import LandingPage from "./components/LandingPage";
 function App() {
 const [data, setData] = useState("");
@@ -19,15 +17,10 @@ const [arrayOfMessages, setArrayOfMessages]= useState([])
       setTimeout(() => socket.connect(), 5000);
     });
     socket.on("Event", (data) => {
-
-    setData(data);
+      let data2={...data, id:Number(data.id)}
+    setData(data2);
     const x= arrayOfMessages
-    if(arrayOfMessages && arrayOfMessages.length !== 0 && arrayOfMessages[arrayOfMessages.length-1].location !== data.location){
-x.push(data)
-    }
-    else if(arrayOfMessages.length===0){
-      x.push(data)
-    }
+    x.push(data2)
     
     setArrayOfMessages(x)
     }
@@ -43,17 +36,15 @@ x.push(data)
        <Router>
         <div>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <ul className="navbar-nav mr-auto">
+          {/* <ul className="navbar-nav mr-auto">
             <li><Link to={'/'} className="nav-link">Landing Page </Link></li>
             <li><Link to={'/Hospital'} className="nav-link">Hospital </Link></li>
             <li><Link to={'/PoliceStation'} className="nav-link">Police Station</Link></li>
-          </ul>
+          </ul> */}
           </nav>
           <hr />
           <Switch>
-              <Route exact path='/' element={<LandingPage arrayOfMessages={arrayOfMessages}/>} />
-              <Route path='/Hospital' element={<Hospital/>} />
-              <Route path='/PoliceStation' element={<PoliceStation/>} />
+              <Route exact path='/' element={<LandingPage data={data} arrayOfMessages={arrayOfMessages}/>} />
           </Switch>
         </div>
       </Router>

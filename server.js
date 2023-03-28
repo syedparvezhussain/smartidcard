@@ -62,15 +62,18 @@ app.get("/exampleApi", (req, res) => {
 }); //Line 11
 app.get("/getVehicleStatus", (req, res) => {
   //Line 9
-  const accident=req.query.accident  // true
-  const rash = req.query.rash
+  const distressMessage=req.query.distressMessage  // true
   const location = req.query.location
+  const studentId=req.query.studentId
+  const timestamp=req.query.timestamp
+  const personname=req.query.personname
   // sport.write(bar);
  const data = {
-accident:accident,
-rash:rash,
-location:location
-
+message:distressMessage,
+location:location,
+id:studentId,
+timestamp:timestamp,
+personname:personname
 }
   console.log('getting api call',data)
   io.to("clock-room").emit("Event", data);

@@ -1,111 +1,126 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-
+import Modal from './Modal';
 const data = [
   {
     id: 1,
     timestamp: "2022-03-28T10:00:00.000Z",
     location: "123 Main St.",
-    rashDriving: false,
-    falseAlarmTrigger: false,
-    accident: true,
-    severity: "High",
+    message:"i am in danger please save me",
+    personname: "Nikhila"
   },
   {
     id: 2,
     timestamp: "2022-03-28T11:00:00.000Z",
     location: "456 Elm St.",
-    rashDriving: true,
-    falseAlarmTrigger: false,
-    accident: false,
-    severity: "Low",
+    message:"i am in danger please save me",
+    personname: "Mobeen"
   },
   {
     id: 3,
     timestamp: "2022-03-28T12:00:00.000Z",
     location: "789 Oak St.",
-    rashDriving: false,
-    falseAlarmTrigger: true,
-    accident: false,
-    severity: "Medium",
+    message:"i am in danger please save me",
+    personname: "Nikhil"
+  },
+  {
+    id: 4,
+    timestamp: "2022-03-28T13:00:00.000Z",
+    location: "789 Oak St.",
+    message:"i am in danger please save me",
+    personname: "akhil"
   },
 ];
 
 const columns = [
   {
-    Header: "Vehicle ID",
+    Header: "Person ID",
     accessor: "id",
   },
   {
-    Header: "Timestamp",
-    accessor: "timestamp",
+    Header: "personName",
+    accessor: "personname",
   },
   {
     Header: "Location",
     accessor: "location",
   },
-  {
-    Header: "Rash Driving",
-    accessor: "rashDriving",
-      Cell: (row) => {
-      return row.value ? <span className="indicator">&#x2714;</span> : <span className="indicator">&#x2718;</span>;;
-    },
+    {
+    Header: "message",
+    accessor: "message",
   },
-  {
-    Header: "False Alarm Trigger",
-    accessor: "falseAlarmTrigger",
-      Cell: (row) => {
-      return row.value ? <span className="indicator">&#x2714;</span> :  <span className="indicator">&#x2718;</span>;;
-    },
-  },
-  {
-    Header: "Accident",
-    accessor: "accident",
-     Cell: (row) => {
-      return row.value ? <span className="indicator">&#x2714;</span> :  <span className="indicator">&#x2718;</span>;;
-    },
-  },
-  {
-    Header: "Severity",
-    accessor: "severity",
+   {
+    Header: "Time and date",
+    accessor: "timestamp",
   },
 ];
+const columns2 = [
+  {
+    Header: "Contact Person Name",
+    accessor: "name",
+  },
+  {
+    Header: "Contact person relation",
+    accessor: "relation",
+  },
+  {
+    Header: "contact person ID",
+    accessor: "id",
+  },
+    {
+    Header: "contact details",
+    accessor: "phone",
+  },
+   
+];
+const data2 = [
+  {
+    id: 1,
+    phone: "940321654",
+    relation: "father",
+    name:"ramanujam",
+  }
+];
 
-const MainPage = () => {
-  const [activeTab, setActiveTab] = useState("Hospital");
 
-  const handleTabChange = (tabName) => {
-    setActiveTab(tabName);
+const MainPage = ({arrayOfMessages, data}) => {
+ const [contactData, setContactData] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [aletsData, setAlertData] = useState([])
+  useEffect(()=>{
+    if(arrayOfMessages.length){
+setAlertData([...arrayOfMessages, data]);
+const lastMsg= arrayOfMessages[arrayOfMessages.length-1]
+const msgString = lastMsg.personname + "is in danger" + "and is in the locaiton " + lastMsg.location + "their personalized message is " + lastMsg.message + "their id is" +lastMsg.id
+alert("new alert **** "+msgString)
+    }
+
+  },[arrayOfMessages, data])
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
-
+  console.log("show this too", arrayOfMessages)
   return (
     <div className="landing-page">
       <nav className="nav-options">
-        <button
-          className={activeTab === "Hospital" ? "active" : ""}
-          onClick={() => handleTabChange("Hospital")}
-        >
-          Hospital
-        </button>
-        <button
-          className={activeTab === "Family" ? "active" : ""}
-          onClick={() => handleTabChange("Family")}
-        >
-          Family
-        </button>
-        <button
-          className={activeTab === "PoliceStation" ? "active" : ""}
-          onClick={() => handleTabChange("PoliceStation")}
-        >
-          Police Station
-        </button>
+      <button onClick={handleOpenModal}>Add contacts</button>
+         <button onClick={()=>{setContactData([])}}>Clear Contacts Data</button>
       </nav>
+      {isModalOpen && <Modal data={contactData} setData={setContactData} studentData={data}closeModal={() => setIsModalOpen(false)} />}
       <div className="main-area">
-        <ReactTable data={data} columns={columns} />
+        Contact Info
+        <div style={{height:"300px",  overflow:"auto"}}>
+        <ReactTable data={contactData} columns={columns2} />
+        </div>
+             <div style={{height:"300px",  overflow:"auto"}}>
+        Details of the Alerts: 
+
+        <ReactTable data={aletsData} columns={columns} />
+        </div>
       </div>
     </div>
   );
-};
+}; 
 
 export default MainPage;

@@ -15,6 +15,7 @@ const Login = ({handleLogin, isLoggedin}) => {
     }
     else{
         alert("something is wrong, please try again later with correct iD password")
+        //add your validations here
     }
 
   };

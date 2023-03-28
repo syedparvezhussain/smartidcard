@@ -2,22 +2,22 @@
 import { useState } from "react"
 import Login from "./Login"
 import MainPage from "./MainPage"
-export default function LandingPage({arrayOfMessages}){
+export default function LandingPage({arrayOfMessages, data}){
     const [loggedIn, setLogin] = useState(false)
-    console.log("loggedin", loggedIn)
+    console.log("loggedin", arrayOfMessages)
     return(
 
     <div class="container">
-Accedent Safty Landing Page
-{arrayOfMessages.map((e)=>{return <div>
-       accident <li>{e.accident}</li>
-      rash driving <li> {e.rash}</li>
+Women Safty for ID card 
+{/* {arrayOfMessages.map((e)=>{return <div>
+       distressMessage <li>{e.distressMessage}</li>
+      studentId <li> {e.studentId}</li>
      location <li>{e.location}</li>
-      </div>})}
+      </div>})} */}
 {loggedIn && 
     <div>
         <button onClick={()=>setLogin(false)}>Logout</button>
-        <MainPage/>
+        <MainPage data={data} arrayOfMessages={arrayOfMessages}/>
     </div>}
 {!loggedIn && 
     <Login handleLogin={(e)=>{setLogin(e)}} isLoggedin ={loggedIn}/>
