@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import Modal from './Modal';
-const data = [
+const datahard = [
   {
     id: 1,
     timestamp: "2022-03-28T10:00:00.000Z",
@@ -91,9 +91,19 @@ const MainPage = ({arrayOfMessages, data}) => {
   useEffect(()=>{
     if(arrayOfMessages.length){
 setAlertData([...arrayOfMessages, data]);
+const contactDataOfStudent=  contactData.filter((e)=>{ 
+
+ return e.id*1===data.id*1
+})
+console.log("the contact data ", contactDataOfStudent)
+let getPhoneNumberMessages = ""
+contactDataOfStudent.forEach((e)=>{
+getPhoneNumberMessages= getPhoneNumberMessages + "  " + e.phone + "  " 
+})
 const lastMsg= arrayOfMessages[arrayOfMessages.length-1]
-const msgString = lastMsg.personname + "is in danger" + "and is in the locaiton " + lastMsg.location + "their personalized message is " + lastMsg.message + "their id is" +lastMsg.id
+const msgString = lastMsg.personname + "is in danger" + "and is in the locaiton " + lastMsg.location + "their personalized message is " + lastMsg.message + "their id is" +lastMsg.id + "sending messages to... " + getPhoneNumberMessages 
 alert("new alert **** "+msgString)
+//TODO need tointegrate external API for SMS service
     }
 
   },[arrayOfMessages, data])
@@ -107,7 +117,7 @@ alert("new alert **** "+msgString)
       <button onClick={handleOpenModal}>Add contacts</button>
          <button onClick={()=>{setContactData([])}}>Clear Contacts Data</button>
       </nav>
-      {isModalOpen && <Modal data={contactData} setData={setContactData} studentData={data}closeModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && <Modal data={contactData} setData={setContactData} studentData={datahard}closeModal={() => setIsModalOpen(false)} />}
       <div className="main-area">
         Contact Info
         <div style={{height:"300px",  overflow:"auto"}}>

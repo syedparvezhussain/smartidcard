@@ -12,7 +12,7 @@ export default function Model({setData,studentData, data, closeModal}) {
     const phoneExist = data.some((e)=>{
       return e.phone === phone
     })
-    const studentPresent = studentData.some((e)=>{
+    const studentPresent =studentData&& studentData.some((e)=>{
       console.log(e.id, id, "sho be ")
       return e.id*1 === id*1
     })
