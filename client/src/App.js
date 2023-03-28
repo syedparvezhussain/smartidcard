@@ -3,7 +3,7 @@ import "./App.css";
 
 import { io } from "socket.io-client";
 import { BrowserRouter as Router,Routes as Switch, Route, Link } from 'react-router-dom';
-
+//"http://192.168.43.84:5000/getVehicleStatus?distressMessage=%20danger%20danger&studentId=3&location=14.4292614,79.9106773&timestamp=2022-03-28T13:00:00.000Z&personname=nikki";
 import LandingPage from "./components/LandingPage";
 function App() {
 const [data, setData] = useState("");
