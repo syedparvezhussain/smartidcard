@@ -1,6 +1,6 @@
 const express = require("express"); //Line 1
 const app = express(); //Line 2
-
+const fs = require('fs');
 const port = process.env.PORT || 5000; //Line 3
 // const PORT = process.env.PORT || 6000;
 // const { SerialPort } = require('serialport')
@@ -80,4 +80,40 @@ personname:personname
 
   res.send({ express: data }); //Line 10
   // sport.end();
+}); //Line 11
+function updateJsonFile(newObject) {
+  // Read the contents of the JSON file
+  fs.readFile('./client/src/settings.json', 'utf-8', (err, data) => {
+    if (err) throw err;
+
+    // Parse the JSON data
+    const json = JSON.parse(data);
+    console.log("json data", json)
+    // Add the new object to the JSON array
+    json.data.push(newObject);
+
+    // Write the updated JSON data back to the file
+    fs.writeFile('./client/src/settings.json', JSON.stringify(json), 'utf-8', (err) => {
+      if (err) throw err;
+      console.log('The file has been updated!');
+    });
+  });
+}
+
+
+
+app.get("/signUp", (req, res) => {
+  //Line 9
+    var currentDate = new Date();
+  console.log(currentDate.toISOString())
+  const username=req.query.username  // true
+  const password = req.query.password
+// Example usage
+
+const newObject = { userName: username, passWord: password };
+updateJsonFile(newObject);
+
+
+  res.send(" user created successfully Signin with Respective Username and Password"); //Line 10
+
 }); //Line 11
