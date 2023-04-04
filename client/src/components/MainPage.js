@@ -2,33 +2,36 @@ import React, { useEffect, useState } from "react";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import Modal from './Modal';
+
+import contact from "../contact.json"
+
 const datahard = [
   {
     id: 1,
     timestamp: "2022-03-28T10:00:00.000Z",
     location: "123 Main St.",
-    message:"i am in danger please save me",
+    message:"Accedent Detected",
     personname: "Nikhila"
   },
   {
     id: 2,
     timestamp: "2022-03-28T11:00:00.000Z",
     location: "456 Elm St.",
-    message:"i am in danger please save me",
+    message:"Rash Driving detected",
     personname: "Mobeen"
   },
   {
     id: 3,
     timestamp: "2022-03-28T12:00:00.000Z",
     location: "789 Oak St.",
-    message:"i am in danger please save me",
+    message:"Accedent Detected",
     personname: "Nikhil"
   },
   {
     id: 4,
     timestamp: "2022-03-28T13:00:00.000Z",
     location: "789 Oak St.",
-    message:"i am in danger please save me",
+    message:"Accedent Detected",
     personname: "akhil"
   },
 ];
@@ -87,7 +90,13 @@ const data2 = [
 const MainPage = ({arrayOfMessages, data}) => {
  const [contactData, setContactData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+
   const [aletsData, setAlertData] = useState([])
+     useEffect(()=>{
+
+    setContactData(contact.contacts);
+  }, [])
   useEffect(()=>{
     if(arrayOfMessages.length){
 setAlertData([...arrayOfMessages, data]);
@@ -110,12 +119,20 @@ alert("new alert **** "+msgString)
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
-  console.log("show this too", arrayOfMessages)
+    async function clearContactJson() {
+  const response = await fetch(`http://localhost:5000/clearContacts`);
+  const jsonData = await response.json();
+  console.log(jsonData);
+  alert(jsonData)
+}
+
   return (
     <div className="landing-page">
       <nav className="nav-options">
       <button onClick={handleOpenModal}>Add contacts</button>
-         <button onClick={()=>{setContactData([])}}>Clear Contacts Data</button>
+         <button onClick={()=>{
+          setContactData([]);
+             clearContactJson();}}>Clear Contacts Data</button>
       </nav>
       {isModalOpen && <Modal data={contactData} setData={setContactData} studentData={datahard}closeModal={() => setIsModalOpen(false)} />}
       <div className="main-area">

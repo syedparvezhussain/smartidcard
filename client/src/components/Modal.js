@@ -16,9 +16,16 @@ export default function Model({setData,studentData, data, closeModal}) {
       console.log(e.id, id, "sho be ")
       return e.id*1 === id*1
     })
+          async function logJSONData(id,phone,name, relation) {
+      const response = await fetch(`http://localhost:5000/updateContacts?id=${id}&name=${name}&phone=${phone}&relation=${relation}`);
+      const jsonData = await response.json();
+      console.log(jsonData);
+      alert(jsonData)
+}
     if(studentPresent){
   if(!phoneExist){
     setData([...data, newData]);
+    logJSONData(id,phone,name,relation  );
     }
     else{
       alert("contact already exist")

@@ -117,3 +117,67 @@ updateJsonFile(newObject);
   res.send(" user created successfully Signin with Respective Username and Password"); //Line 10
 
 }); //Line 11
+
+function updatecontactJsonFile(newObject) {
+  // Read the contents of the JSON file
+  fs.readFile('./client/src/contact.json', 'utf-8', (err, data) => {
+    if (err) throw err;
+
+    // Parse the JSON data
+    const json = JSON.parse(data);
+    console.log("json data", json)
+    // Add the new object to the JSON array
+    json.contacts.push(newObject);
+
+    // Write the updated JSON data back to the file
+    fs.writeFile('./client/src/contact.json', JSON.stringify(json), 'utf-8', (err) => {
+      if (err) throw err;
+      console.log('The file has been updated!');
+    });
+  });
+}
+
+function clearcontactJsonFile() {
+  // Read the contents of the JSON file
+  fs.readFile('./client/src/contact.json', 'utf-8', (err, data) => {
+    if (err) throw err;
+
+    // Parse the JSON data
+    const json = {"contacts":[]}
+    console.log("json data", json)
+    // Add the new object to the JSON array
+ 
+
+    // Write the updated JSON data back to the file
+    fs.writeFile('./client/src/contact.json', JSON.stringify(json), 'utf-8', (err) => {
+      if (err) throw err;
+      console.log('The file has been updated!');
+    });
+  });
+}
+
+app.get("/updateContacts", (req, res) => {
+  //Line 9
+    var currentDate = new Date();
+  console.log(currentDate.toISOString())
+  const id=req.query.id  // true
+  const name = req.query.name
+    const phone=req.query.phone  // true
+  const relation = req.query.relation
+// Example usage
+// Example usage
+
+const newObject = { id: id, name: name, phone:phone, relation:relation };
+updatecontactJsonFile(newObject);
+
+  res.send("Contact Added Successfully  !!!"); //Line 10
+
+
+}); //Line 11
+
+app.get("/clearContacts", (req, res) => {
+clearcontactJsonFile();
+  res.send("Contact cleard Successfully  !!!"); //Line 10
+
+
+}); //Line 11
