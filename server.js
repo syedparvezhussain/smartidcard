@@ -1,6 +1,7 @@
 const express = require("express"); //Line 1
 const app = express(); //Line 2
 const fs = require('fs');
+const mysql = require('mysql');
 const port = process.env.PORT || 5000; //Line 3
 // const PORT = process.env.PORT || 6000;
 // const { SerialPort } = require('serialport')
@@ -15,9 +16,33 @@ const port = process.env.PORT || 5000; //Line 3
 //   console.error('Error:', err);
 // });
 // sport.close();
-
+const connection = mysql.createConnection({
+  host:"localhost",
+  user: "root",
+  password:"password",
+  database:"iiclub"
+})
+// Connecting to database
+connection.connect(function (err) {
+    if (err) {
+        console.log("Error in the connection")
+        console.log(err)
+    }
+    else {
+        console.log(`Database Connected`)
+        connection.query(`SHOW DATABASES`,
+            function (err, result) {
+                if (err)
+                    console.log(`Error executing the query - ${err}`)
+                else
+                    console.log("Result: ", result)
+            })
+    }
+})
 const socketIo = require("socket.io");
 const http = require("http");
+const { Select } = require("@material-ui/core");
+const { hostname } = require("os");
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
@@ -46,7 +71,22 @@ app.listen(5001, () => console.log(`Listening on port ${5001}`)); //Line 6
 // create a GET route
 app.get("/express_backend", (req, res) => {
   //Line 9
-  res.send({ express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT" }); //Line 10
+  let x ;
+    connection.query(`select * from userinfo`,
+            function (err, result) {
+                if (err){
+                  
+                    console.log(`Error executing the query - ${err}`)
+                   res.send("errors")}
+                else{
+                      x = { express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT", result : JSON.stringify(result) }
+                    console.log("Result: ", result, x)
+                   res.send(JSON.stringify(x));
+                  }
+                    
+            })
+       
+  //Line 10
 }); //Line 11
 
 app.get("/exampleApi", (req, res) => {
@@ -106,15 +146,47 @@ app.get("/signUp", (req, res) => {
   //Line 9
     var currentDate = new Date();
   console.log(currentDate.toISOString())
-  const username=req.query.username  // true
+const username=req.query.username  // true
   const password = req.query.password
+    const id=req.query.id  // true
+  const roleId = req.query.roleId
+    const name=req.query.name  // true
+  const role = req.query.role
 // Example usage
 
-const newObject = { userName: username, passWord: password };
+const newObject = { 
+  userName: username,
+   passWord: password,
+   id:id,
+   role:role,
+   roleId:roleId,
+    name:name,   };
+
+    let x ;
+    connection.query(`INSERT INTO userinfo(name, userName, role, passWord,roleId, id )
+                VALUES ('1', 'User', 'Test', '23', '23', '1234' );`,
+            function (err, result) {
+              try{
+                
+            
+                if (err){
+                  
+                    console.log(`Error executing the query - ${err}`)
+                   res.send({msg:"failed to fetch from DB", error:err})}
+                else{
+                      x = { msg:"success", result : JSON.stringify(result) }
+                    console.log("Result: ", result, x)
+                   res.send(JSON.stringify(x));
+                  }
+                      }
+                      catch {
+                        console.log("error occured")
+                      }
+            })
 updateJsonFile(newObject);
 
 
-  res.send(" user created successfully Signin with Respective Username and Password"); //Line 10
+  res.send( JSON.stringify({...newObject, msg:" user created successfully Signin with Respective Username and Password"})); //Line 10
 
 }); //Line 11
 
