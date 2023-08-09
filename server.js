@@ -88,7 +88,29 @@ app.get("/express_backend", (req, res) => {
        
   //Line 10
 }); //Line 11
+app.get("/getusers", (req, res)=>{
+  const _query = "select * from userinfo";
+  let error;
+  let resultMain;
+  connection.query(_query, function (err, result){
+    try{
+      if(err){
+error= {msg:"failed to fetch from DB", error:err}
+      }
+      else{
+         resultMain = { msg:"success", result : JSON.stringify(result) }
+      }
+      console.log(JSON.stringify(result), "this is coming")
+        res.send({express: resultMain});
+    }
+    catch{
+      console.log("error occured while fetch")
+    }
 
+  })
+ 
+   
+})
 app.get("/exampleApi", (req, res) => {
   //Line 9
   const bar=req.query.data  // true
@@ -100,6 +122,7 @@ app.get("/exampleApi", (req, res) => {
   res.send({ express: bar }); //Line 10
   // sport.end();
 }); //Line 11
+
 app.get("/getVehicleStatus", (req, res) => {
   //Line 9
   const distressMessage=req.query.distressMessage  // true
@@ -163,8 +186,9 @@ const newObject = {
     name:name,   };
 
     let x ;
-    connection.query(`INSERT INTO userinfo(name, userName, role, passWord,roleId, id )
-                VALUES ('1', 'User', 'Test', '23', '23', '1234' );`,
+    
+const _query = "INSERT INTO userinfo (name, userName, role, passWord,roleId, id) VALUES ('" + name + "', '" + username + "', '" + role + "','" + password + "','" + roleId + "','" + id + "' );"
+    connection.query(_query,
             function (err, result) {
               try{
                 
@@ -183,7 +207,7 @@ const newObject = {
                         console.log("error occured")
                       }
             })
-updateJsonFile(newObject);
+// updateJsonFile(newObject);
 
 
   res.send( JSON.stringify({...newObject, msg:" user created successfully Signin with Respective Username and Password"})); //Line 10

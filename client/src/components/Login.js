@@ -3,13 +3,27 @@ import settings from '../settings.json'
 const Login = ({handleLogin, isLoggedin}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+ async function loginGetUsers() {
+  const response = await fetch(`http://localhost:5000/getusers`, { mode: 'no-cors'}).then((res)=>{
+      console.log(res);
+  });
+  // const jsonData = await response.json()
+  // console.log(jsonData);
+  // alert(JSON.stringify(jsonData))
+}
   const handleSubmit = (event) => {
+       loginGetUsers();
     event.preventDefault();
     console.log(`Username: ${username} Password: ${password}`);
     // You can add your authentication logic here
+ 
     const data = settings.data;
-    const x= data.some((e)=>username === e.userName && password === e.passWord)
+    let x= false;
+    data.forEach((e)=>{
+      if(username == e.userName && password == e.passWord){
+        x=true
+      }
+    })
     if(x){
         handleLogin(true)
     }
